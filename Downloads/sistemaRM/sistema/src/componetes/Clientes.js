@@ -1,65 +1,61 @@
-import React from "react"
-import {Table} from "react-bootstrap"
-import { render } from "react-dom";
-class Clientes extends React.Component{
-    
-    constructor(props){
+import React from "react";
+import { Table } from "react-bootstrap";
+
+class Clientes extends React.Component {
+  constructor(props) {
     super(props);
-
     this.state = {
-         Clientes: []
-                
-        }   
-    }
-    componentDidMount(){
-        fetch("https://localhost:5001/api/clientes")
-        .then(resposta => resposta.json())
-        .then(dados => {
-            this.setState({Clientes : dados})
-        })
-    }
-componentWillUnmount(){
-    
-}
-  
-    render(){
-        return(
-            <Table> 
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Cpf</th>
-                        <th>contato</th>
-                        <th>cep</th>
-                        <th>numero</th>
-                        <th>cidade</th>
-                        <th>estado</th>
-                        <th>Oppção</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        this.state.Clientes.map((Clientes) =>
-                        <tr>
-                            <td>{Clientes.nome}</td>
-                            <td>{Clientes.email}</td>
-                            <td>{Clientes.Cpf}</td>
-                            <td>{Clientes.contato}</td>
-                            <td>{Clientes.cep}</td>
-                            <td>{Clientes.numero}</td>
-                            <td>{Clientes.cidade}</td>
-                            <td>{Clientes.estado}</td>
-                            <td> Editar Excluir </td>
-                        </tr>
-                        )
-                    }
-                            
-                </tbody>
+      clientes: [] // Armazena a lista de clientes
+    };
+  }
 
-                </Table>                
-    )
-    }
+  componentDidMount() {
+    // Requisição para o backend para buscar a lista de clientes
+    fetch("http://localhost:5001/api/clientes")
+      .then((resposta) => resposta.json())  // Convertendo a resposta para JSON
+      .then((dados) => {
+        this.setState({ clientes: dados });  // Atualizando o estado com os dados recebidos
+      })
+      .catch((erro) => {
+        console.error("Erro ao buscar clientes:", erro); // Exibindo erros no console, se houver
+      });
+  }
+
+  render() {
+    return (
+      <Table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cpf</th>
+            <th>Contato</th>
+            <th>Cep</th>
+            <th>Número</th>
+            <th>Cidade</th>
+            <th>Estado</th>
+            <th>Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+          {/* Mapeando os clientes para renderizar as linhas da tabela */}
+          {this.state.clientes.map((cliente) => (
+            <tr key={cliente.id}>
+              <td>{cliente.nome}</td>
+              <td>{cliente.email}</td>
+              <td>{cliente.cpf}</td>
+              <td>{cliente.contato}</td>
+              <td>{cliente.cep}</td>
+              <td>{cliente.numero}</td>
+              <td>{cliente.cidade}</td>
+              <td>{cliente.estado}</td>
+              <td>Editar Excluir</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    );
+  }
 }
 
-  export default Clientes;
+export default Clientes;
